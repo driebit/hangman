@@ -72,4 +72,13 @@ view model =
                 ]
 
         PlayGame ->
-            div [] [ text model.secret ]
+            div [] [ showSecret model ]
+
+
+showSecret : Model -> Html Msg
+showSecret model =
+    let
+        n =
+            String.length model.secret
+    in
+    text <| String.fromList <| List.repeat n '*'
