@@ -18,7 +18,7 @@ main =
 
 
 type alias Model =
-    { secret : String
+    { secret : List Char
     , mode : Mode
     }
 
@@ -30,7 +30,7 @@ type Mode
 
 init : Model
 init =
-    { secret = ""
+    { secret = []
     , mode = InputSecret
     }
 
@@ -52,7 +52,7 @@ update msg model =
             model
 
         SetSecret value ->
-            { model | secret = value }
+            { model | secret = String.toList value }
 
         StartGame ->
             { model | mode = PlayGame }
@@ -79,6 +79,6 @@ showSecret : Model -> Html Msg
 showSecret model =
     let
         n =
-            String.length model.secret
+            List.length model.secret
     in
     text <| String.fromList <| List.repeat n '*'
