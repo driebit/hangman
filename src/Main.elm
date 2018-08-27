@@ -17,12 +17,12 @@ main =
 
 
 type alias Model =
-    String
+    { secret : String }
 
 
 init : Model
 init =
-    "hangman"
+    { secret = "" }
 
 
 
@@ -46,4 +46,4 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [] [ text model ]
+    div [] [ text model.secret ]
