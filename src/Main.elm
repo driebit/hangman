@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (..)
-import Html.Events exposing (onInput)
+import Html.Events exposing (onClick, onInput)
 
 
 main =
@@ -25,6 +25,7 @@ type alias Model =
 
 type Mode
     = InputSecret
+    | PlayGame
 
 
 init : Model
@@ -41,6 +42,7 @@ init =
 type Msg
     = Nop
     | SetSecret String
+    | StartGame
 
 
 update : Msg -> Model -> Model
@@ -52,6 +54,9 @@ update msg model =
         SetSecret value ->
             { model | secret = value }
 
+        StartGame ->
+            { model | mode = PlayGame }
+
 
 
 -- VIEW
@@ -59,4 +64,7 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [] [ input [ onInput SetSecret ] [] ]
+    div []
+        [ input [ onInput SetSecret ] []
+        , button [ onClick StartGame ] [ text "start" ]
+        ]
