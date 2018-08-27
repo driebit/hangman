@@ -64,7 +64,12 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ input [ onInput SetSecret ] []
-        , button [ onClick StartGame ] [ text "start" ]
-        ]
+    case model.mode of
+        InputSecret ->
+            div []
+                [ input [ onInput SetSecret ] []
+                , button [ onClick StartGame ] [ text "start" ]
+                ]
+
+        PlayGame ->
+            div [] [ text model.secret ]
