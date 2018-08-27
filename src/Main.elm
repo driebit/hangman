@@ -1,7 +1,8 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, div, text)
+import Html exposing (..)
+import Html.Events exposing (onInput)
 
 
 main =
@@ -17,12 +18,20 @@ main =
 
 
 type alias Model =
-    { secret : String }
+    { secret : String
+    , mode : Mode
+    }
+
+
+type Mode
+    = InputSecret
 
 
 init : Model
 init =
-    { secret = "" }
+    { secret = ""
+    , mode = InputSecret
+    }
 
 
 
@@ -31,6 +40,7 @@ init =
 
 type Msg
     = Nop
+    | SetSecret String
 
 
 update : Msg -> Model -> Model
@@ -39,6 +49,9 @@ update msg model =
         Nop ->
             model
 
+        SetSecret value ->
+            { model | secret = value }
+
 
 
 -- VIEW
@@ -46,4 +59,4 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [] [ text model.secret ]
+    div [] [ input [ onInput SetSecret ] [] ]
