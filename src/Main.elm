@@ -30,6 +30,7 @@ type alias Model =
 type Mode
     = InputSecret
     | PlayGame
+    | GameOver
 
 
 init : Model
@@ -78,6 +79,12 @@ update msg model =
                     { model
                         | guesses = Set.insert char model.guesses
                         , currentGuess = ""
+                        , mode =
+                            if Set.size model.guesses == 5 then
+                                GameOver
+
+                            else
+                                PlayGame
                     }
 
         StartGame ->
@@ -106,6 +113,12 @@ view model =
                     ]
                 , div [] [ showWrongGuesses model ]
                 , div [] [ showPicture model ]
+                ]
+
+        GameOver ->
+            div []
+                [ div [] [ text (String.fromList model.secret) ]
+                , img [ src "img/6.png" ] []
                 ]
 
 
