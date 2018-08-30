@@ -110,7 +110,11 @@ view model =
 showSecret : Model -> Html Msg
 showSecret model =
     let
-        n =
-            List.length model.secret
+        showChar c =
+            if Set.member c model.guesses then
+                c
+
+            else
+                '*'
     in
-    text <| String.fromList <| List.repeat n '*'
+    text <| String.fromList <| List.map showChar model.secret
