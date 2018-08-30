@@ -104,6 +104,7 @@ view model =
                     [ input [ onInput SetCurrentGuess, value model.currentGuess ] []
                     , button [ onClick MakeGuess ] [ text "guess" ]
                     ]
+                , div [] [ showWrongGuesses model ]
                 ]
 
 
@@ -118,3 +119,17 @@ showSecret model =
                 '*'
     in
     text <| String.fromList <| List.map showChar model.secret
+
+
+showWrongGuesses : Model -> Html Msg
+showWrongGuesses model =
+    let
+        wrong =
+            Set.filter (\c -> not (List.member c model.secret))
+                model.guesses
+    in
+    div []
+        [ ul [] <|
+            List.map (\c -> li [] [ text (String.fromChar c) ]) <|
+                Set.toList wrong
+        ]
