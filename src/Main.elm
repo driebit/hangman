@@ -2,7 +2,9 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (..)
+import Html.Attributes exposing (value)
 import Html.Events exposing (onClick, onInput)
+import Set exposing (Set)
 
 
 main =
@@ -20,6 +22,8 @@ main =
 type alias Model =
     { secret : List Char
     , mode : Mode
+    , currentGuess : String
+    , guesses : Set Char
     }
 
 
@@ -32,6 +36,8 @@ init : Model
 init =
     { secret = []
     , mode = InputSecret
+    , currentGuess = ""
+    , guesses = Set.empty
     }
 
 
@@ -42,6 +48,8 @@ init =
 type Msg
     = Nop
     | SetSecret String
+    | SetCurrentGuess String
+    | MakeGuess
     | StartGame
 
 
@@ -53,6 +61,24 @@ update msg model =
 
         SetSecret value ->
             { model | secret = String.toList value }
+
+        SetCurrentGuess value ->
+            { model | currentGuess = value }
+
+        MakeGuess ->
+            let
+                guess =
+                    String.toList model.currentGuess
+            in
+            case List.head guess of
+                Nothing ->
+                    model
+
+                Just char ->
+                    { model
+                        | guesses = Set.insert char model.guesses
+                        , currentGuess = ""
+                    }
 
         StartGame ->
             { model | mode = PlayGame }
@@ -72,7 +98,13 @@ view model =
                 ]
 
         PlayGame ->
-            div [] [ showSecret model ]
+            div []
+                [ div [] [ showSecret model ]
+                , div []
+                    [ input [ onInput SetCurrentGuess, value model.currentGuess ] []
+                    , button [ onClick MakeGuess ] [ text "guess" ]
+                    ]
+                ]
 
 
 showSecret : Model -> Html Msg
