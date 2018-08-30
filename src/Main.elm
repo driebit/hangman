@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (..)
-import Html.Attributes exposing (value)
+import Html.Attributes exposing (src, value)
 import Html.Events exposing (onClick, onInput)
 import Set exposing (Set)
 
@@ -105,6 +105,7 @@ view model =
                     , button [ onClick MakeGuess ] [ text "guess" ]
                     ]
                 , div [] [ showWrongGuesses model ]
+                , div [] [ showPicture model ]
                 ]
 
 
@@ -133,3 +134,17 @@ showWrongGuesses model =
             List.map (\c -> li [] [ text (String.fromChar c) ]) <|
                 Set.toList wrong
         ]
+
+
+showPicture : Model -> Html Msg
+showPicture model =
+    let
+        n =
+            Set.size <|
+                Set.filter (\c -> not (List.member c model.secret))
+                    model.guesses
+
+        imgSrc =
+            String.concat [ "img/", String.fromInt n, ".png" ]
+    in
+    img [ src imgSrc ] []
